@@ -34,7 +34,7 @@ demo = gr.Interface(fn=instruct_and_predict,
     layout="vertical",
     title="甲骨文学习小游戏",
     description="请在上方文本框输入你希望绘制的甲骨文（例如：“人”或“大”），然后在画板上进行绘制，查看结果。",
-    theme="huggingface"
+    theme="default"
 )
 
 demo.launch(share=True)
