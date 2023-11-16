@@ -23,7 +23,7 @@ def instruct_and_predict(instruction, input_img=None):
         return result_text, feedback
 
 label_input = gr.Textbox(label="我希望你画的是")
-Image_input = gr.Image(shape=(128, 128), source="canvas", label="画板", optional=True)
+Image_input = gr.Image(shape=(128, 128), source="canvas", label="画板")
 label_output = gr.Textbox(label="你画的甲骨文是")
 Image_output = gr.Textbox(label="反馈")
 
@@ -31,7 +31,6 @@ demo = gr.Interface(fn=instruct_and_predict,
     inputs=[label_input,Image_input],
     outputs=[label_output,Image_output],
     live=False,
-    layout="vertical",
     title="甲骨文学习小游戏",
     description="请在上方文本框输入你希望绘制的甲骨文（例如：“人”或“大”），然后在画板上进行绘制，查看结果。",
     theme="default"
