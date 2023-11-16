@@ -1,15 +1,15 @@
 import gradio as gr
-from XEdu.hub import Workflow as wf
+import BaseDeploy as bd
 
-model = wf(task='MMEdu',checkpoint='Oracle.onnx')
+model_path = 'Oracle.onnx'
 classes = ['人','大']
 
 def instruct_and_predict(instruction, input_img=None):
     if input_img is None:
         return "", "请按照上方的指示开始绘图。"
     else:
-        result = model.inference(data=input_img) 
-        result = model.format_output(lang="zh")
+        result = model.inference(input_img)
+        result = model.print_result(result)
         result_text = classes[result['标签']]
         feedback = ""
         if result['置信度'] < 0.99:
@@ -34,7 +34,7 @@ demo = gr.Interface(fn=instruct_and_predict,
     layout="vertical",
     title="甲骨文学习小游戏",
     description="请在上方文本框输入你希望绘制的甲骨文（例如：“人”或“大”），然后在画板上进行绘制，查看结果。",
-    theme="default"
+    theme="huggingface"
 )
 
 demo.launch(share=True)
