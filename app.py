@@ -1,14 +1,40 @@
 import gradio as gr
 from XEdu.hub import Workflow as wf
+
 model = wf(task='MMEdu',checkpoint='Oracle.onnx')
-classes = ['人','大'] # 指定中文类别名称
+classes = ['人','大']
 
-def predict(input_img):  
-    result = model.inference(data=input_img) 
-    result = model.format_output(lang="zh")
-    result_text = "预测结果是：" + classes[result['标签']] # 输出中文推理结果
-    return input_img,result_text
+def instruct_and_predict(instruction, input_img=None):
+    if input_img is None:
+        return "", "请按照上方的指示开始绘图。"
+    else:
+        result = model.inference(data=input_img) 
+        result = model.format_output(lang="zh")
+        result_text = classes[result['标签']]
+        feedback = ""
+        if result['置信度'] < 0.99:
+            feedback = f"不太对哦，我都判断不准确了！"
+        else:    
+            if instruction == result_text:
+                feedback = "恭喜！你画得很好！"
+            else:
+                feedback = f"不太对哦，我期望的是：{instruction}，但你画的像：{result_text}。"
 
-demo = gr.Interface(fn=predict,  inputs=gr.Image(shape=(128, 128),source="canvas"), outputs=["image","text"])
+        return result_text, feedback
+
+label_input = gr.Textbox(label="我希望你画的是")
+Image_input = gr.Image(shape=(128, 128), source="canvas", label="画板", optional=True)
+label_output = gr.Textbox(label="你画的甲骨文是")
+Image_output = gr.Textbox(label="反馈")
+
+demo = gr.Interface(fn=instruct_and_predict, 
+    inputs=[label_input,Image_input],
+    outputs=[label_output,Image_output],
+    live=False,
+    layout="vertical",
+    title="甲骨文学习小游戏",
+    description="请在上方文本框输入你希望绘制的甲骨文（例如：“人”或“大”），然后在画板上进行绘制，查看结果。",
+    theme="default"
+)
+
 demo.launch(share=True)
-
