@@ -8,5 +8,4 @@ def predict(input_img):
     return input_img,result
 
 demo = gr.Interface(fn=predict,  inputs=gr.Image(shape=(128, 128),source="canvas"),"image", outputs=["image","text"])
-demo = gr.Interface(sepia, gr.Image(shape=(128,128),source="canvas"), "image")
 demo.launch(share=True)
