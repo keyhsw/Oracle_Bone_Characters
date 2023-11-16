@@ -36,4 +36,4 @@ demo = gr.Interface(fn=instruct_and_predict,
     theme="default"
 )
 
-demo.launch(share=True)
+demo.launch()
