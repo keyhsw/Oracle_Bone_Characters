@@ -1,19 +1,18 @@
 import gradio as gr
-from MMEdu import MMClassification as cls
+from XEdu.hub import Workflow as wf
 
-model = cls(backbone='LeNet')
-checkpoint = 'best_accuracy_top-1_epoch_9.pth'
+model = wf(task='MMEdu',checkpoint='Oracle.onnx')
 classes = ['人','大']
 
 def instruct_and_predict(instruction, input_img=None):
     if input_img is None:
         return "", "请按照上方的指示开始绘图。"
     else:
-        result = model.inference(image=input_img, show=False, checkpoint=checkpoint)
-        result = model.print_result(result)
-        result_text = classes[result[0]['标签']]
+        result = model.inference(data=input_img) 
+        result = model.format_output(lang="zh")
+        result_text = classes[result['标签']]
         feedback = ""
-        if result[0]['置信度'] < 0.99:
+        if result['置信度'] < 0.99:
             feedback = f"不太对哦，我都判断不准确了！"
         else:    
             if instruction == result_text:
