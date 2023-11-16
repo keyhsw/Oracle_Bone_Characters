@@ -1,2 +1,1 @@
-BaseDeploy
-BaseDT
+XEdu-python
