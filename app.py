@@ -1,6 +1,6 @@
 import gradio as gr
 from XEdu.hub import Workflow as wf
-model = wf(task='MMEdu',checkpoint='Oracle.onnx')
+model = wf(task='MMEdu',checkpoint='model/Oracle.onnx')
 
 def predict(input_img):
     result = model.inference(data=input_img) 
