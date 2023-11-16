@@ -1,2 +1,1 @@
-XEdu-python=0.0.5
-gradio=3.41.2
+XEdu-python
